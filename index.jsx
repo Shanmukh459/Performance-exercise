@@ -1,6 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import { slowCountItems } from "./utils"
 // import ProductsList from "./ProductsList"
+import productsData from "./data"
 
 const ProductsList = React.lazy(() => {
   return import("./ProductsList")
@@ -17,6 +19,11 @@ function App() {
   function decrement() {
     setCount(prevCount => prevCount - 1)
   }
+
+  const productsCount = React.useMemo(() => {
+    return slowCountItems(productsData, 500)
+  }, [productsData])
+  // const productsCount = slowCountItems(ProductsList, 500)
 
   return (
     <>
@@ -37,6 +44,7 @@ function App() {
             </button>
       <br />
       <br />
+      <h2>There are {productsCount} products</h2>
       <React.Suspense fallback={<h2>Loading...</h2>}>
         <div className="products-list">
           {showProducts && <ProductsList />}
